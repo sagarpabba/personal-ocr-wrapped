@@ -45,8 +45,7 @@ public class AspriseOCR {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		loadLibraryIntoJavaPath("aspriseocr");	
-		
-		
+			
 	    String codepath="testedimages//passcode38.jpg";			
 		recognizeEverything(codepath,false);
 		
