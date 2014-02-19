@@ -20,7 +20,7 @@ public abstract class TesseractOCR {
 	
 	
 	public static String getLoginValidateCode(String fileName) throws Exception {
-		OCR ocr = new OCR();
+		HPOCR ocr = new HPOCR();
 		ImageFilter imf = new ImageFilter(ImageIOHelper.getImage(new File(fileName)));
 		ImageFilter imf2 = new ImageFilter(imf.scale(1.65f));
 		BufferedImage img = imf2.changeGrey();
@@ -70,7 +70,7 @@ public abstract class TesseractOCR {
 	
 	private static String recognizeEverything(String filepath,boolean filter) throws Exception {
 		long starter=System.currentTimeMillis();
-		OCR ocr = new OCR();
+		HPOCR ocr = new HPOCR();
 		File parsedfile=null;
 		if(filter){			
 			ImageFilter imf = new ImageFilter(ImageIOHelper.getImage(new File(filepath)));
