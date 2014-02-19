@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 import org.apache.commons.io.FileUtils;
 
 
+
+
 import com.asprise.util.ocr.OCR;
 
 /**
@@ -42,41 +44,43 @@ public class AspriseOCR {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		loadLibraryIntoJavaPath("aspriseocr");	
 		
-		loadLibraryIntoJavaPath("aspriseocr");
-		long starter=System.currentTimeMillis();
 		
-		ImageFilter imf = new ImageFilter(ImageIOHelper.getImage(new File("testedimages//login_passcode.png")));
-		ImageFilter imf2 = new ImageFilter(imf.changeGrey());
-		ImageFilter imf3 = new ImageFilter(imf2.median());
-		BufferedImage img = imf3.lineGrey();
-		File file = ImageIOHelper.createImage(img);
-		String imagestr=recognizeEverything(file.getAbsolutePath());
-		long end=System.currentTimeMillis();
-		System.out.println("Cracked Code:"+imagestr+",AspriseOCR time is:"+(end-starter));
+	    String codepath="testedimages//passcode38.jpg";			
+		recognizeEverything(codepath,false);
+		
 	}
 
 	public static void loadLibraryIntoJavaPath(String nativelibrarypath){
-		try {
-			
+		try {			
 			//private String tessPath = new File("aspriseocr").getAbsolutePath();
-
 			FileUtils.copyDirectory( new File(nativelibrarypath), new File("C:\\Windows"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	public static String recognizeEverything(String filepath){
-		BufferedImage image;
-		String imagestr = null;
+	public static String recognizeEverything(String filepath,boolean filter){
+	   BufferedImage image;
+	   String imagestr = null;
+	   File parsefile=null;		
+       long starter=System.currentTimeMillis();	
+       if(filter){
+	    	ImageFilter imf = new ImageFilter(ImageIOHelper.getImage(new File(filepath)));
+	   		ImageFilter imf2 = new ImageFilter(imf.changeGrey());
+	   		//ImageFilter imf3 = new ImageFilter(imf2.median());
+	   		BufferedImage img = imf2.lineGrey();
+	   		parsefile = ImageIOHelper.createImage(img);
+       }else{
+    	    parsefile=new File(filepath);
+       }
+  
 		try {
 		/*	System.out.println(System.getProperty("java.library.path")); 
 			System.setProperty("java.library.path","/lib");
 				//	+ "//com/resources/aspriseocr") ;
 			System.out.println("path is:"+System.getProperty("java.library.path")); 
-
                     
            System.loadLibrary("AspriseOCR");
            System.loadLibrary("AspriseJTwain");
@@ -84,7 +88,7 @@ public class AspriseOCR {
            System.loadLibrary("ILU");*/
            // System.out.println(new File("").getAbsolutePath());
 			//FileUtils.copyDirectory(new File(new File("").getAbsolutePath()+"\\aspriseocr"), new File("C:\\Windows"));
-			image = ImageIO.read(new File(filepath));
+			image = ImageIO.read(parsefile);
 			imagestr=new OCR().recognizeEverything(image);
 			//System.out.println("cnfig is :"+imagestr);
 			imagestr=imagestr.replaceAll("[.|?|:|(|)|=|,|\r\n|%|'|&|$|@|#|/|!|-|\\[|\\]]|\\*", "").replaceAll(" ","").trim();			
@@ -92,7 +96,8 @@ public class AspriseOCR {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		long end=System.currentTimeMillis();
+		System.out.println("Cracked Code:"+imagestr+",AspriseOCR took time is:"+(end-starter));
 		return imagestr;
 	}
 }

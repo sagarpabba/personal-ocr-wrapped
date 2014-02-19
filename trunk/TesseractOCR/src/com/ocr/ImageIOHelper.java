@@ -77,7 +77,8 @@ public class ImageIOHelper {
 		File tempFile = null;
 		try {
 			tempFile = File.createTempFile("tempImageFile", ".tif");
-			tempFile.deleteOnExit();
+			//System.out.println("path is :"+tempFile.getAbsolutePath());
+		//	tempFile.deleteOnExit();
 			TIFFImageWriteParam tiffWriteParam = new TIFFImageWriteParam(Locale.US);
 			tiffWriteParam.setCompressionMode(ImageWriteParam.MODE_DISABLED);
 
