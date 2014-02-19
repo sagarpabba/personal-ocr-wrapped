@@ -23,9 +23,10 @@ public class OCR {
 	private String tessPath = new File("tessdata").getAbsolutePath();
 
 	public String recognizeText(File imageFile, String imageFormat) throws Exception {
-		File tempImage = ImageIOHelper.createImage(imageFile, imageFormat);
-
-		File outputFile = new File(imageFile.getParentFile(), "output");
+		//File tempImage = imageFile;
+		//ImageIOHelper.createImage(imageFile, imageFormat);
+		File outputFile =new File(imageFile.getParentFile(), "output");
+		//System.out.println("path is:"+outputFile.getAbsolutePath());
 		StringBuffer strB = new StringBuffer();
 
 		List<String> cmd = new ArrayList<String>();
@@ -43,16 +44,16 @@ public class OCR {
 		ProcessBuilder pb = new ProcessBuilder();
 		pb.directory(imageFile.getParentFile());
 
-		cmd.set(1, tempImage.getName());
+		cmd.set(1, imageFile.getName());
 		pb.command(cmd);
 		pb.redirectErrorStream(true);
 		Process process = pb.start();
 
 		int w = process.waitFor();
-		System.out.println("Exit value = {}"+w);
+		System.out.println("Exit value ="+w+",if the code is 0 ,means it's success");
 
 		// delete temp working files
-		tempImage.delete();
+		//imageFile.delete();
 
 		if (w == 0) {
 			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(outputFile
@@ -80,12 +81,12 @@ public class OCR {
 			default:
 				msg = "Errors occurred.";
 			}
-			tempImage.delete();
+			//imageFile.delete();
 			throw new RuntimeException(msg);
 		}
 
 		new File(outputFile.getAbsolutePath() + ".txt").delete();
-		System.out.println("code is:"+ strB);
+	//	System.out.println("code is:"+ strB);
 		return strB.toString();
 	}
 }
