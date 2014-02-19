@@ -16,7 +16,7 @@ import java.util.List;
 import org.jdesktop.swingx.util.OS;
 
 
-public class OCR {
+public class HPOCR {
 	//protected transient final Logger logger = Logger.getLogger(this.getClass());
 	private final String LANG_OPTION = "-l";
 	private final String EOL = System.getProperty("line.separator");
