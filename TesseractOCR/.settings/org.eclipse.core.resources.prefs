@@ -1,4 +1,8 @@
 eclipse.preferences.version=1
+encoding//src/com/image/filter1/ImageFilter.java=UTF-8
+encoding//src/com/image/filter1/MyImgFilter.java=UTF-8
+encoding//src/com/image/filter2/Cutter.java=UTF-8
+encoding//src/com/image/filter2/DECheckCode.java=UTF-8
+encoding//src/com/image/filter2/ImageFilter.java=UTF-8
+encoding//src/com/image/filter2/Tools.java=UTF-8
 encoding//src/com/ocr/AspriseOCR.java=UTF-8
-encoding//src/com/ocr/ImageFilter.java=UTF-8
-encoding//src/com/ocr/MyImgFilter.java=UTF-8

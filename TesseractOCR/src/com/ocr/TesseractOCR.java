@@ -3,6 +3,9 @@ package com.ocr;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+import com.image.filter1.ImageFilter;
+import com.image.filter1.ImageIOHelper;
+
 
 
 
@@ -13,18 +16,18 @@ public abstract class TesseractOCR {
 	
 	
 	public static void main(String[] args) throws Exception {
-		 String codepath="testedimages//passcode38.jpg";
-		 recognizeEverything(codepath,false);
+		 String codepath="testedimages//myeng.myfont.exp0.jpg";
+		 recognizeEverything(codepath,true);
 	}
 	
 	
 	
 	public static String getLoginValidateCode(String fileName) throws Exception {
-		HPOCR ocr = new HPOCR();
+		DOOCR ocr = new DOOCR();
 		ImageFilter imf = new ImageFilter(ImageIOHelper.getImage(new File(fileName)));
 		ImageFilter imf2 = new ImageFilter(imf.scale(1.65f));
 		BufferedImage img = imf2.changeGrey();
-		return ocr.recognizeText(ImageIOHelper.createImage(img), "tiff").trim();
+		return ocr.recognizeText(ImageIOHelper.createImage(img)).trim();
 	}
 	
 	/*public static String getM18ValidateCode(DefaultHttpClient client,OCR ocr,String html) throws Exception{
@@ -70,20 +73,20 @@ public abstract class TesseractOCR {
 	
 	private static String recognizeEverything(String filepath,boolean filter) throws Exception {
 		long starter=System.currentTimeMillis();
-		HPOCR ocr = new HPOCR();
+		DOOCR ocr = new DOOCR();
 		File parsedfile=null;
 		if(filter){			
 			ImageFilter imf = new ImageFilter(ImageIOHelper.getImage(new File(filepath)));
 			ImageFilter imf2 = new ImageFilter(imf.changeGrey());  //
-		//	ImageFilter imf3 = new ImageFilter(imf2.median());
+			//ImageFilter imf3 = new ImageFilter(imf2.median());
 			BufferedImage img = imf2.lineGrey();
 			parsedfile = ImageIOHelper.createImage(img);
-			//System.out.println("parsed image path is:"+parsedfile.getAbsolutePath());
+			System.out.println("Parsed Filter File path is:"+parsedfile.getAbsolutePath());
 		}else{
 			parsedfile=new File(filepath);
 		}
 		
-		String imagestr=ocr.recognizeText(parsedfile, "tiff").trim();
+		String imagestr=ocr.recognizeText(parsedfile).replaceAll("[.|?|:|(|)|=|,|\r\n|%|'|&|$|@|#|/|!|-|\\[|\\]]|\\*", "").replaceAll(" ","").trim();
 		long end=System.currentTimeMillis();
 		System.out.println("Cracked Code:"+imagestr+",TesseractOCR took time is:"+(end-starter));
 		return imagestr;

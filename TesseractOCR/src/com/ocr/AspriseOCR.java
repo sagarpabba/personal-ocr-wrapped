@@ -11,7 +11,12 @@ import org.apache.commons.io.FileUtils;
 
 
 
+
+
+
 import com.asprise.util.ocr.OCR;
+import com.image.filter1.ImageFilter;
+import com.image.filter1.ImageIOHelper;
 
 /**
 * @ClassName: AspriseOCR
@@ -38,6 +43,8 @@ import com.asprise.util.ocr.OCR;
 * @author alterhu2020@gmail.com
 * @date Feb 17, 2014 1:15:28 PM
 * 
+* it supported hand write very well than Tesseract OCR
+* 
 */
 
 public class AspriseOCR {
@@ -46,7 +53,7 @@ public class AspriseOCR {
 		// TODO Auto-generated method stub
 		loadLibraryIntoJavaPath("aspriseocr");	
 			
-	    String codepath="testedimages//passcode38.jpg";			
+	    String codepath="testedimages//cutter//filter.png";			
 		recognizeEverything(codepath,false);
 		
 	}
@@ -63,16 +70,17 @@ public class AspriseOCR {
 	public static String recognizeEverything(String filepath,boolean filter){
 	   BufferedImage image;
 	   String imagestr = null;
-	   File parsefile=null;		
+	   File parsedfile=null;		
        long starter=System.currentTimeMillis();	
        if(filter){
 	    	ImageFilter imf = new ImageFilter(ImageIOHelper.getImage(new File(filepath)));
 	   		ImageFilter imf2 = new ImageFilter(imf.changeGrey());
 	   		//ImageFilter imf3 = new ImageFilter(imf2.median());
 	   		BufferedImage img = imf2.lineGrey();
-	   		parsefile = ImageIOHelper.createImage(img);
+	   		parsedfile = ImageIOHelper.createImage(img);
+	   		System.out.println("Parsed Filter File path is:"+parsedfile.getAbsolutePath());
        }else{
-    	    parsefile=new File(filepath);
+    	    parsedfile=new File(filepath);
        }
   
 		try {
@@ -87,7 +95,7 @@ public class AspriseOCR {
            System.loadLibrary("ILU");*/
            // System.out.println(new File("").getAbsolutePath());
 			//FileUtils.copyDirectory(new File(new File("").getAbsolutePath()+"\\aspriseocr"), new File("C:\\Windows"));
-			image = ImageIO.read(parsefile);
+			image = ImageIO.read(parsedfile);
 			imagestr=new OCR().recognizeEverything(image);
 			//System.out.println("cnfig is :"+imagestr);
 			imagestr=imagestr.replaceAll("[.|?|:|(|)|=|,|\r\n|%|'|&|$|@|#|/|!|-|\\[|\\]]|\\*", "").replaceAll(" ","").trim();			
